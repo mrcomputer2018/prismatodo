@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["reactNative"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./app.db"
+}
+
+// Your data model
+
+model Task {
+    id           Int     @id @default(autoincrement())
+    name         String
+    completed    Boolean @default(false)
+    created_at   DateTime? @default(now()) // ? - valor opcional
+    updated_at   DateTime? @default(now())
+}

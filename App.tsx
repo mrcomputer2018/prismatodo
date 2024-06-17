@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import Home from './src/screen/home';
+import { useEffect, useState } from 'react';
+import { initializeDb } from './src/services/db';
+import { SafeAreaView, Text } from 'react-native';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    const [ initialized, setInitialized ] = useState(false);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    useEffect(() => {
+        const setup = async () => {
+            try {
+                await initializeDb();
+                setInitialized(true);
+            } catch (error) {
+                console.log("Erro ao inicializar o banco de dados: ", error);
+            }
+        }
+
+        setup();
+    }, []);
+
+    if (!initialized) {
+        return (
+            <SafeAreaView>
+                <Text>Carregando...</Text>
+            </SafeAreaView>
+        );
+    }
+
+    return (
+        <Home />
+    );
+}
